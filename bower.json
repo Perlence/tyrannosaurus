@@ -1,0 +1,18 @@
+{
+  "name": "tyrannosaurus",
+  "version": "0.1.0",
+  "homepage": "https://github.com/Perlence/tyrannosaurus",
+  "authors": [
+    "Sviatoslav Abakumov <abakumov.sviatoslav@progforce.com>"
+  ],
+  "description": "A thesaurus on Django",
+  "main": "manage.py",
+  "license": "BSD",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
