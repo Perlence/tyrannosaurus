@@ -1,0 +1,5 @@
+django-configuration==0.0.3
+django-extensions==1.5.5
+django-polymorphic==0.7.1
+Django==1.8.2
+six==1.9.0
