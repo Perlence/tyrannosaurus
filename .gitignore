@@ -62,3 +62,6 @@ db.sqlite3
 # Vim stuff
 .vimrc
 tags
+
+# Bower stuff
+bower_components
