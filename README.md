@@ -54,7 +54,7 @@
 - Create super user:
 
   ```cmd
-  C:\Users\John\tyrannosaurus> python manage.py createsuperuser
+  (py27) C:\Users\John\tyrannosaurus> python manage.py createsuperuser
   ```
 
 - Run server:
