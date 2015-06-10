@@ -1,3 +1,0 @@
-{% for related_descriptor in relation %}
-<a href="{% url 'query' %}?q={{ related_descriptor.name }}">{{ related_descriptor.name }}</a>{% if not forloop.last %},{% endif %}
-{% endfor %}

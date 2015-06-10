@@ -1,0 +1,47 @@
+{% extends 'base.jinja.html' %}
+
+{% block title %}{{ request.GET.q + ' - ' if request.GET.get('q') is not none else '' }}Tyrannosaurus Thesaurus{% endblock %}
+
+{% block body %}
+<div class="container">
+  <h1>Tyrannosaurus Thesaurus</h1>
+
+  <form action="/" method="GET" accept-charset="utf-8">
+    <div class="input-group">
+      <input type="text" name="q" class="form-control input-lg" value="{{ request.GET.q|d('')}}" placeholder="I'm searching for...">
+      <span class="input-group-btn">
+        <select class="form-control btn btn-default input-lg depth" name="depth">
+          <option value="">Depth</option>
+          <option value="1" {{ 'selected' if request.GET.get('depth') == '1' }}>1</option>
+          <option value="2" {{ 'selected' if request.GET.get('depth') == '2' }}>2</option>
+          <option value="3" {{ 'selected' if request.GET.get('depth') == '3' }}>3</option>
+          <option value="4" {{ 'selected' if request.GET.get('depth') == '4' }}>4</option>
+          <option value="-1" {{ 'selected' if request.GET.get('depth') == '-1' }}>∞</option>
+        </select>
+        <button type="submit" class="btn btn-default input-lg">Search</button>
+      </span>
+    </div>
+  </form>
+
+  {% for (descriptor, relations) in relations %}
+  <h2>{{ descriptor.name }}</h2>
+  <div class="row">
+    <div class="col-xs-12 col-sm-6 col-md-8">
+      <p>{{ descriptor.description }}</p>
+    </div>
+    <div class="col-xs-12 col-sm-6 col-md-4">
+      <dl class="dl-horizontal">
+      {% for (description_term, children) in relations %}
+        <dt>{{ description_term }}</dt>
+        <dd>
+        {% for child in children %}
+        <a href="{{ url('query') }}?q={{ child.name }}{{ '&depth=' + request.GET.depth if request.GET.get('depth') is not none else '' }}">{{ child.name }}</a>{% if not loop.last %},{% endif %}
+        {% endfor %}
+        </dd>
+      {% endfor %}
+      </dl>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

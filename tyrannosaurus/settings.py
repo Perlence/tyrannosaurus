@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
 
     'django_extensions',
+    'django_jinja',
 
     'thesaurus',
 )
@@ -57,6 +58,19 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'tyrannosaurus.urls'
 
 TEMPLATES = [{
+    'BACKEND': 'django_jinja.backend.Jinja2',
+    'APP_DIRS': True,
+    'OPTIONS': {
+        'match_extension': '.jinja.html',
+        'context_processors': [
+            'django.template.context_processors.debug',
+            'django.template.context_processors.request',
+            'django.template.context_processors.static',
+            'django.contrib.auth.context_processors.auth',
+            'django.contrib.messages.context_processors.messages',
+        ],
+    }
+}, {
     'BACKEND': 'django.template.backends.django.DjangoTemplates',
     'DIRS': [],
     'APP_DIRS': True,
@@ -67,7 +81,7 @@ TEMPLATES = [{
             'django.contrib.auth.context_processors.auth',
             'django.contrib.messages.context_processors.messages',
         ],
-    },
+    }
 }]
 
 WSGI_APPLICATION = 'tyrannosaurus.wsgi.application'
