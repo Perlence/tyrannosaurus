@@ -13,17 +13,44 @@ class DescriptorForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(DescriptorForm, self).__init__(*args, **kwargs)
-        # Provide initial values for related m2m fields.
         instance = kwargs.get('instance')
-        if instance is None:
-            return
-        self._set_initial(instance, 'children')
-        self._set_initial(instance, 'lower_level_descriptors')
-        self._set_initial(instance, 'consists_of')
+        if instance is not None:
+            self._set_initial(instance, 'children')
+            self._set_initial(instance, 'lower_level_descriptors')
+            self._set_initial(instance, 'consists_of')
 
     def _set_initial(self, instance, fieldname):
+        """Provide initial values for symmetrical relations and wrap the
+        fields in RelatedFieldWidgetWrapper."""
+        field = self.fields[fieldname]
+        parents = self.fields['parents']
+
         related_manager = getattr(instance, fieldname)
-        self.fields[fieldname].initial = [item.pk for item in related_manager.all()]
+        field.initial = related_manager.all()
+
+        widget = field.widget
+        rel = getattr(Descriptor, fieldname).related
+        admin_site = parents.widget.admin_site
+        wrapped = admin.widgets.RelatedFieldWidgetWrapper(widget, rel, admin_site)
+        field.widget = wrapped
+        field.help_text = parents.help_text
+
+    def save(self, commit=True):
+        descriptor = super(DescriptorForm, self).save(commit=False)
+
+        if commit:
+            descriptor.save()
+
+        reverse_relations = {'children', 'lower_level_descriptors', 'consists_of'}
+        if reverse_relations.intersection(self.changed_data):
+            if not descriptor.pk:
+                descriptor.save()
+            descriptor.children = self.cleaned_data['children']
+            descriptor.lower_level_descriptors = self.cleaned_data['lower_level_descriptors']
+            descriptor.consists_of = self.cleaned_data['consists_of']
+            self.save_m2m()
+
+        return descriptor
 
     class Meta:
         model = Descriptor
@@ -39,18 +66,5 @@ class DescriptorForm(forms.ModelForm):
 class DescriptorAdmin(admin.ModelAdmin):
     search_fields = ('name', 'description')
     form = DescriptorForm
-
-    def save_model(self, request, obj, form, change):
-        self._save_m2m_field(obj, form, 'children')
-        self._save_m2m_field(obj, form, 'lower_level_descriptors')
-        self._save_m2m_field(obj, form, 'consists_of')
-        return super(DescriptorAdmin, self).save_model(request, obj, form, change)
-
-    def _save_m2m_field(self, obj, form, fieldname):
-        if fieldname not in form.changed_data:
-            return
-        field = form.fields[fieldname]
-        data = form.data.get(fieldname, [])
-        setattr(obj, fieldname, field.to_python(data))
 
 admin.site.register(Descriptor, DescriptorAdmin)
