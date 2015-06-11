@@ -11,22 +11,32 @@ class DescriptorForm(forms.ModelForm):
     lower_level_descriptors = forms.ModelMultipleChoiceField(all_descriptors, required=False)
     consists_of = forms.ModelMultipleChoiceField(all_descriptors, required=False)
 
+    class Meta:
+        model = Descriptor
+        fields = ('name',
+                  'description',
+                  'synonyms',
+                  'parents', 'children',
+                  'higher_level_descriptors', 'lower_level_descriptors',
+                  'part_of', 'consists_of',
+                  'associated_with', 'related_technologically')
+
     def __init__(self, *args, **kwargs):
         super(DescriptorForm, self).__init__(*args, **kwargs)
         instance = kwargs.get('instance')
-        if instance is not None:
-            self._set_initial(instance, 'children')
-            self._set_initial(instance, 'lower_level_descriptors')
-            self._set_initial(instance, 'consists_of')
+        self.prepare_reverse_relations(instance, 'children')
+        self.prepare_reverse_relations(instance, 'lower_level_descriptors')
+        self.prepare_reverse_relations(instance, 'consists_of')
 
-    def _set_initial(self, instance, fieldname):
+    def prepare_reverse_relations(self, instance, fieldname):
         """Provide initial values for symmetrical relations and wrap the
         fields in RelatedFieldWidgetWrapper."""
         field = self.fields[fieldname]
         parents = self.fields['parents']
 
-        related_manager = getattr(instance, fieldname)
-        field.initial = related_manager.all()
+        if instance is not None:
+            related_manager = getattr(instance, fieldname)
+            field.initial = related_manager.all()
 
         widget = field.widget
         rel = getattr(Descriptor, fieldname).related
@@ -51,16 +61,6 @@ class DescriptorForm(forms.ModelForm):
             self.save_m2m()
 
         return descriptor
-
-    class Meta:
-        model = Descriptor
-        fields = ('name',
-                  'description',
-                  'synonyms',
-                  'parents', 'children',
-                  'higher_level_descriptors', 'lower_level_descriptors',
-                  'part_of', 'consists_of',
-                  'associated_with', 'related_technologically')
 
 
 class DescriptorAdmin(admin.ModelAdmin):
