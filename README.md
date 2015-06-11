@@ -3,64 +3,69 @@
 
 ## Installation
 
-- Install [Python 2.7](https://www.python.org/downloads/windows/):
+1.  Install [Python 2.7](https://www.python.org/downloads/windows/):
 
-  - On step 'Customize Python 2.7' please check 'Add python.exe to Path'
+    - On step 'Customize Python 2.7' please check 'Add python.exe to Path'
 
-- Install [Virtualenv](https://virtualenv.pypa.io/en/latest/installation.html)
+2.  Install [Virtualenv](https://virtualenv.pypa.io/en/latest/installation.html)
 
-- Install [Node.js](https://nodejs.org/download/)
+3.  Install [Node.js](https://nodejs.org/download/)
 
-- Install [Bower](http://bower.io/#install-bower)
+4.  Install [Bower](http://bower.io/#install-bower)
 
-- Install [Git](https://git-scm.com/download/win):
+5.  Install [Git](https://git-scm.com/download/win):
 
-  - On step 'Adjusting your PATH environment' please check 'Use Git from the Windows Command Prompt'
+    - On step 'Adjusting your PATH environment' please check 'Use Git from the Windows Command Prompt'
 
-  - On step 'Configuring the line ending conversions' please check 'Checkout as-is, commit as-is'
+    - On step 'Configuring the line ending conversions' please check 'Checkout as-is, commit as-is'
 
-- Clone the repository:
+6.  Clone the repository:
 
-  ```batch
-  C:\Users\John> git clone https://github.com/Perlence/tyrannosaurus
-  C:\Users\John> cd tyrannosaurus
-  ```
+    ```batch
+    C:\Users\John> git clone https://github.com/Perlence/tyrannosaurus
+    C:\Users\John> cd tyrannosaurus
+    ```
 
-- Create and activate virtual environment:
+7.  Create virtual environment:
 
-  ```batch
-  C:\Users\John\tyrannosaurus> virtualenv py27
-  C:\Users\John\tyrannosaurus> py27\Scripts\activate.bat
-  ```
+    ```batch
+    C:\Users\John\tyrannosaurus> virtualenv py27
+    ```
 
-- Install requirements:
+8.  Activate virtual environment:
 
-  ```batch
-  (py27) C:\Users\John\tyrannosaurus> pip install -r requirements.txt -r dev-requirements.txt
-  ```
+    ```batch
+    C:\Users\John\tyrannosaurus> py27\Scripts\activate.bat
+    ```
 
-- Install Bower components:
+9.  Install requirements:
 
-  ```batch
-  (py27) C:\Users\John\tyrannosaurus> bower install
-  ```
+    ```batch
+    (py27) C:\Users\John\tyrannosaurus> pip install -r requirements.txt -r dev-requirements.txt
+    ```
 
-- Apply migrations:
+10.  Install Bower components:
 
-  ```batch
-  (py27) C:\Users\John\tyrannosaurus> python manage.py migrate
-  ```
+    ```batch
+    (py27) C:\Users\John\tyrannosaurus> bower install
+    ```
 
-- Create super user:
+11. Apply migrations:
 
-  ```cmd
-  (py27) C:\Users\John\tyrannosaurus> python manage.py createsuperuser
-  ```
+    ```batch
+    (py27) C:\Users\John\tyrannosaurus> python manage.py migrate
+    ```
 
-- Run server:
+12. Create super user:
 
-  ```batch
-  (py27) C:\Users\John\tyrannosaurus> python manage.py runserver
-  ```
+    ```cmd
+    (py27) C:\Users\John\tyrannosaurus> python manage.py createsuperuser
+    ```
 
-- Open browser and go to http://127.0.0.1:8000
+13. Run server:
+
+    ```batch
+    (py27) C:\Users\John\tyrannosaurus> python manage.py runserver
+    ```
+
+14. Open browser and go to http://127.0.0.1:8000
