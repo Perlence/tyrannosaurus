@@ -20,20 +20,24 @@ def query(request):
                                      'part_of', 'consists_of',
                                      'associated_with',
                                      'related_technologically'))
-    relations = []
+    descriptor_dicts = []
     for descriptor in descriptors:
-        relations.append([
-            ('Synonyms', descriptor.synonyms.all()),
-            ('Parents', get_related(descriptor, 'parents', depth=depth)),
-            ('Children', get_related(descriptor, 'children', depth=depth)),
-            ('Higher level', get_related(descriptor, 'higher_level_descriptors', depth=depth)),
-            ('Lower level', get_related(descriptor, 'lower_level_descriptors', depth=depth)),
-            ('Part of', get_related(descriptor, 'part_of', depth=depth)),
-            ('Consists of', get_related(descriptor, 'consists_of', depth=depth)),
-            ('Associated with', descriptor.associated_with.all()),
-            ('Techno-related', descriptor.related_technologically.all()),
-        ])
-    return render(request, 'index.jinja.html', {'relations': zip(descriptors, relations)})
+        descriptor_dicts.append({
+            'name': descriptor.name,
+            'description': descriptor.description,
+            'relations': [
+                ('Synonyms', descriptor.synonyms.all()),
+                ('Parents', list(get_related(descriptor, 'parents', depth=depth))),
+                ('Children', list(get_related(descriptor, 'children', depth=depth))),
+                ('Higher level', list(get_related(descriptor, 'higher_level_descriptors', depth=depth))),
+                ('Lower level', list(get_related(descriptor, 'lower_level_descriptors', depth=depth))),
+                ('Part of', list(get_related(descriptor, 'part_of', depth=depth))),
+                ('Consists of', list(get_related(descriptor, 'consists_of', depth=depth))),
+                ('Associated with', descriptor.associated_with.all()),
+                ('Techno-related', descriptor.related_technologically.all()),
+            ]
+        })
+    return render(request, 'index.jinja.html', {'descriptors': descriptor_dicts})
 
 
 def get_param(multidict, key, default=None, type=None):

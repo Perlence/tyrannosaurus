@@ -23,25 +23,21 @@
     </div>
   </form>
 
-  {% for (descriptor, relations) in relations %}
+  {% for descriptor in descriptors %}
   <h2>{{ descriptor.name }}</h2>
-  <div class="row">
-    <div class="col-xs-12 col-sm-6 col-md-8">
-      <p>{{ descriptor.description }}</p>
-    </div>
-    <div class="col-xs-12 col-sm-6 col-md-4">
-      <dl class="dl-horizontal">
-      {% for (description_term, children) in relations %}
-        <dt>{{ description_term }}</dt>
-        <dd>
-        {% for child in children %}
-        <a href="{{ url('query') }}?q={{ child.name }}{{ '&depth=' + request.GET.depth if request.GET.get('depth') is not none else '' }}">{{ child.name }}</a>{% if not loop.last %},{% endif %}
-        {% endfor %}
-        </dd>
-      {% endfor %}
-      </dl>
-    </div>
-  </div>
+  <p>{{ descriptor.description }}</p>
+  <dl class="dl-inline">
+  {% for (description_term, children) in descriptor.relations %}
+    {% if children %}
+    <dt>{{ description_term }}</dt>
+    {% for child in children %}
+    <dd>
+      <a href="{{ url('query') }}?q={{ child.name }}{{ '&depth=' + request.GET.depth if request.GET.get('depth') is not none else '' }}">{{ child.name }}</a>
+    </dd>
+    {% endfor %}
+    {% endif %}
+  {% endfor %}
+  </dl>
   {% endfor %}
 </div>
 {% endblock %}
