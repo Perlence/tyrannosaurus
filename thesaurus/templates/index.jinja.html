@@ -1,8 +1,8 @@
-{% extends 'base.jinja.html' %}
+{%- extends 'base.jinja.html' %}
 
-{% block title %}{{ request.GET.q + ' - ' if request.GET.get('q') is not none else '' }}Tyrannosaurus Thesaurus{% endblock %}
+{%- block title %}{{ request.GET.q + ' - ' if request.GET.get('q') is not none else '' }}Tyrannosaurus Thesaurus{% endblock %}
 
-{% block body %}
+{%- block body %}
 <div class="container">
   <h1>Tyrannosaurus Thesaurus</h1>
 
@@ -12,32 +12,32 @@
       <span class="input-group-btn">
         <select class="form-control btn btn-default input-lg depth" name="depth">
           <option value="">Depth</option>
-          <option value="1" {{ 'selected' if request.GET.get('depth') == '1' }}>1</option>
-          <option value="2" {{ 'selected' if request.GET.get('depth') == '2' }}>2</option>
-          <option value="3" {{ 'selected' if request.GET.get('depth') == '3' }}>3</option>
-          <option value="4" {{ 'selected' if request.GET.get('depth') == '4' }}>4</option>
-          <option value="-1" {{ 'selected' if request.GET.get('depth') == '-1' }}>∞</option>
+          <option value="1" {{ 'selected' if request.GET.get('depth') == '1' else '' }}>1</option>
+          <option value="2" {{ 'selected' if request.GET.get('depth') == '2' else '' }}>2</option>
+          <option value="3" {{ 'selected' if request.GET.get('depth') == '3' else '' }}>3</option>
+          <option value="4" {{ 'selected' if request.GET.get('depth') == '4' else '' }}>4</option>
+          <option value="-1" {{ 'selected' if request.GET.get('depth') == '-1' else '' }}>∞</option>
         </select>
         <button type="submit" class="btn btn-default input-lg">Search</button>
       </span>
     </div>
   </form>
 
-  {% for descriptor in descriptors %}
+  {%- for descriptor in descriptors %}
   <h2>{{ descriptor.name }}</h2>
   <p>{{ descriptor.description }}</p>
   <dl class="dl-inline">
-  {% for (description_term, children) in descriptor.relations %}
-    {% if children %}
+  {%- for (description_term, children) in descriptor.relations %}
+    {%- if children %}
     <dt>{{ description_term }}</dt>
-    {% for child in children %}
+    {%- for child in children %}
     <dd>
-      <a href="{{ url('query') }}?q={{ child.name }}{{ '&depth=' + request.GET.depth if request.GET.get('depth') is not none else '' }}">{{ child.name }}</a>
+      <a href="{{ url('query') }}?q={{ child.name }}{{ '&depth=' + request.GET.depth if request.GET.get('depth') else '' }}">{{ child.name }}</a>
     </dd>
-    {% endfor %}
-    {% endif %}
-  {% endfor %}
+    {%- endfor %}
+    {%- endif %}
+  {%- endfor %}
   </dl>
-  {% endfor %}
+  {%- endfor %}
 </div>
-{% endblock %}
+{%- endblock %}
